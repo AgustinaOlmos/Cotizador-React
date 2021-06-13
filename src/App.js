@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Formulario from './components/Formulario';
 import Resumen from './components/Resumen';
 import Resultado from './components/Resultado';
+import Spinner from './components/Spinner';
 
 import styled from '@emotion/styled';
 
@@ -14,7 +15,6 @@ const ContenedorFormulario = styled.div`
   background-color: #FFF;
   padding: 3rem;
 `
-
 
 function App() {
 
@@ -29,6 +29,8 @@ function App() {
   // extraer datos
   const { cotizacion, datos } = resumen
 
+  const [cargando, guardarCargando] = useState(false)
+
   return (
     <Contenedor>
       <Header
@@ -38,16 +40,22 @@ function App() {
       <ContenedorFormulario>
         <Formulario
           guardarResumen={guardarResumen}
+          guardarCargando={guardarCargando}
         />
 
-        <Resumen
-          datos={datos}
-        />
+        {cargando ? <Spinner /> : null}
 
-        <Resultado
-          cotizacion={cotizacion}
-        />
-
+        {!cargando
+          ?
+          <>
+            <Resumen
+              datos={datos}
+            />
+            <Resultado
+              cotizacion={cotizacion} />
+          </>
+          : null
+        }
       </ContenedorFormulario>
     </Contenedor>
   );
